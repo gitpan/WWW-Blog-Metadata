@@ -1,5 +1,5 @@
 name: WWW-Blog-Metadata
-version: 0.01
+version: 0.02
 abstract: Extract common metadata from a weblog
 author: Benjamin Trott <ben+cpan@stupidfool.org>
 license: perl

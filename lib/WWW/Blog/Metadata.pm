@@ -1,10 +1,10 @@
-# $Id: Metadata.pm 1798 2005-01-28 06:40:23Z btrott $
+# $Id: Metadata.pm 1811 2005-03-16 22:50:01Z btrott $
 
 package WWW::Blog::Metadata;
 use strict;
 use base qw( Class::ErrorHandler Class::Accessor );
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use Module::Pluggable::Ordered search_path => [ 'WWW::Blog::Metadata' ];
 use HTML::Parser;
@@ -12,7 +12,7 @@ use Feed::Find;
 use URI::Fetch;
 
 __PACKAGE__->mk_accessors(qw(
-    base_uri icon_uri feeds foaf_uri generator lat lon
+    base_uri feeds foaf_uri generator lat lon
 ));
 
 sub extract_from_html {
@@ -33,6 +33,8 @@ sub extract_from_html {
     $p->{meta} = $meta;
     $p->{base_uri} = $base_uri;
     $p->parse($$html);
+
+    $class->call_plugins('on_finished', $meta);
     $meta;
 }
 
@@ -53,11 +55,9 @@ sub start_element {
         (my $type = lc $attr->{type}) =~ s/^\s*//;
         $type =~ s/\s*$//;
         my $href = URI->new_abs($attr->{href}, $p->{base_uri})->as_string;
-        if ($rel{meta} && $attr->{type} eq 'application/rdf+xml' &&
+        if ($rel{meta} && $type eq 'application/rdf+xml' &&
             $attr->{title} eq 'FOAF') {
             $meta->foaf_uri($href);
-        } elsif ($rel{icon}) {
-            $meta->icon_uri($href);
         }
     } elsif ($tag eq 'base') {
         $p->{base_uri} = $attr->{href} if $attr->{href};
@@ -75,7 +75,7 @@ sub start_element {
     } else {
         $p->eof;
     }
-    (ref $meta)->call_plugins('on_got_tag', $meta, $tag, $attr);
+    (ref $meta)->call_plugins('on_got_tag', $meta, $tag, $attr, $p->{base_uri});
 }
 
 1;
@@ -155,11 +155,6 @@ change at some point.)
 The URI for a FOAF file, specified in the standard manner used for
 FOAF auto-discovery.
 
-=head2 $meta->icon_uri
-
-The URI for a shortcut/favicon, specified in a I<shortcut icon>
-I<E<lt>link /E<gt>> tag.
-
 =head2 $meta->lat
 
 =head2 $meta->lon
@@ -228,9 +223,9 @@ to retrieve the name of the identified weblogging tool.
 This event is fired for each HTML tag found in the document during the
 parsing phase.
 
-Your method will receive 4 parameters: the class name; the
-I<WWW::Blog::Metadata> object; the tag name; and a reference to a hash
-containing the tag attributes.
+Your method will receive 5 parameters: the class name; the
+I<WWW::Blog::Metadata> object; the tag name; a reference to a hash
+containing the tag attributes; and the base URI.
 
 The following example looks for the specific tag identifying the URI for
 the RSD (Really Simple Discoverability) file identifying the editing APIs
@@ -244,10 +239,10 @@ that the weblog supports.
 
     sub on_got_tag {
         my $class = shift;
-        my($meta, $tag, $attr) = @_;
+        my($meta, $tag, $attr, $base_uri) = @_;
         if ($tag eq 'link' && $attr->{rel} =~ /\bEditURI\b/i &&
             $attr->{type} eq 'application/rsd+xml') {
-            $meta->rsd_uri($attr->{href});
+            $meta->rsd_uri(URI->new_abs($attr->{href}, $base_uri)->as_string);
         }
     }
     sub on_got_tag_order { 99 }
@@ -261,6 +256,13 @@ returned from the I<extract_from_*> methods, so you can call
     print $meta->rsd_uri;
 
 to retrieve the URI for the RSD file.
+
+=item * on_finished
+
+This event is fired at the end of the extraction process.
+
+Your method will receive 2 parameters: the class name, and the
+I<WWW::Blog::Metadata> object.
 
 =head1 LICENSE
 

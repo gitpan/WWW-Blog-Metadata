@@ -1,7 +1,7 @@
-# $Id: 01-extract.t 1797 2005-01-28 05:37:13Z btrott $
+# $Id: 01-extract.t 1815 2005-03-16 22:54:04Z btrott $
 
 use strict;
-use Test::More tests => 18;
+use Test::More tests => 16;
 use WWW::Blog::Metadata;
 use File::Spec::Functions;
 use URI::file;
@@ -24,7 +24,6 @@ is($meta->feeds->[1], 'http://btrott.typepad.com/typepad/index.rdf');
 is($meta->foaf_uri, 'http://btrott.typepad.com/foaf.rdf');
 is($meta->lat, '37.743630');
 is($meta->lon, '-122.443182');
-is($meta->icon_uri, 'http://example.com/favicon.ico');
 
 $meta = WWW::Blog::Metadata->extract_from_uri('http://btrott.typepad.com/');
 ok($meta);
@@ -35,4 +34,3 @@ is($meta->feeds->[1], 'http://btrott.typepad.com/typepad/index.rdf');
 is($meta->foaf_uri, 'http://btrott.typepad.com/foaf.rdf');
 ok(!$meta->lat);
 ok(!$meta->lon);
-ok(!$meta->icon_uri);
