@@ -1,0 +1,31 @@
+$Id: README 1800 2005-01-28 06:44:44Z btrott $
+
+This is WWW::Blog::Metadata, a class to extract common metadata from
+weblogs.
+
+PREREQUISITES
+
+    * Class::ErrorHandler
+    * Feed::Find
+    * HTML::Parser
+    * URI::Fetch
+    * Class::Accessor
+    * Module::Pluggable::Ordered
+
+INSTALLATION
+
+WWW::Blog::Metadata installation is straightforward. If your CPAN shell
+is set up, you should just be able to do
+
+    % perl -MCPAN -e 'install WWW::Blog::Metadata'
+
+Download it, unpack it, then build it as per the usual:
+
+    % perl Makefile.PL
+    % make && make test
+
+Then install it:
+
+    % make install
+
+Benjamin Trott / ben+cpan@stupidfool.org
