@@ -1,5 +1,3 @@
-# $Id: RSD.pm 1799 2005-01-28 06:41:55Z btrott $
-
 package WWW::Blog::Metadata::RSD;
 use strict;
 

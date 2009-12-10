@@ -1,5 +1,3 @@
-# $Id: IsTypePad.pm 1811 2005-03-16 22:50:01Z btrott $
-
 package WWW::Blog::Metadata::IsTypePad;
 use strict;
 

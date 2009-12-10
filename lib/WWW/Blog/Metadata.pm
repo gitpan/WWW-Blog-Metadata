@@ -1,10 +1,10 @@
-# $Id: Metadata.pm 1811 2005-03-16 22:50:01Z btrott $
-
 package WWW::Blog::Metadata;
 use strict;
+use 5.008_001;
+
 use base qw( Class::ErrorHandler Class::Accessor );
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 use Module::Pluggable::Ordered search_path => [ 'WWW::Blog::Metadata' ];
 use HTML::Parser;
@@ -89,6 +89,7 @@ WWW::Blog::Metadata - Extract common metadata from weblogs
 
     use WWW::Blog::Metadata;
     use Data::Dumper;
+    my $uri;
     my $meta = WWW::Blog::Metadata->extract_from_uri($uri)
         or die WWW::Blog::Metadata->errstr;
     print Dumper $meta;
@@ -263,6 +264,8 @@ This event is fired at the end of the extraction process.
 
 Your method will receive 2 parameters: the class name, and the
 I<WWW::Blog::Metadata> object.
+
+=back
 
 =head1 LICENSE
 

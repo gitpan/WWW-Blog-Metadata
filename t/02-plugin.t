@@ -1,5 +1,3 @@
-# $Id: 02-plugin.t 1811 2005-03-16 22:50:01Z btrott $
-
 use strict;
 use Test::More tests => 8;
 use WWW::Blog::Metadata;
@@ -25,6 +23,6 @@ lib->import(catdir 't', 'lib');
 ## calling extract_metadata.
 $meta = WWW::Blog::Metadata->extract_from_uri('http://btrott.typepad.com/');
 ok($meta);
-is($meta->rsd_uri, 'http://www.typepad.com/t/rsd/8');
+like $meta->rsd_uri, qr/www\.typepad\.com/, 'rsd_uri is extracted';
 is($meta->is_typepad, 1);
 is($meta->finished, 1);

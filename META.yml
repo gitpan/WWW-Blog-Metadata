@@ -1,18 +1,33 @@
-name: WWW-Blog-Metadata
-version: 0.02
-abstract: Extract common metadata from a weblog
-author: Benjamin Trott <ben+cpan@stupidfool.org>
-license: perl
+---
+abstract: 'Extract common metadata from weblogs'
+author:
+  - 'Benjamin Trott, ben+cpan@stupidfool.org. All rights reserved.'
+build_requires:
+  ExtUtils::MakeMaker: 6.42
+  Test::More: 0
+configure_requires:
+  ExtUtils::MakeMaker: 6.42
 distribution_type: module
-requires:
-  Class::ErrorHandler: 0
-  HTML::Parser: 0
-  Feed::Find: 0
-  URI::Fetch: 0
-  Class::Accessor: 0
-  Module::Pluggable::Ordered: 0
+generated_by: 'Module::Install version 0.91'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: WWW-Blog-Metadata
 no_index:
   directory:
-    - t
     - inc
-generated_by: Module::Install version 0.36
+    - t
+    - xt
+requires:
+  Class::Accessor: 0
+  Class::ErrorHandler: 0
+  Feed::Find: 0
+  HTML::Parser: 0
+  Module::Pluggable::Ordered: 0
+  URI::Fetch: 0
+  perl: 5.8.1
+resources:
+  license: http://dev.perl.org/licenses/
+  repository: origin
+version: 0.03
